@@ -1,10 +1,22 @@
-function main() {
+function mainV3() {
   chrome.action.onClicked.addListener((tab) => {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       function: copyToClipboard
     });
   });
+}
+
+// For v2
+function main() {
+  const copyToClipboardAsString = `(${copyToClipboard.toString()})();`;
+
+  chrome.browserAction.onClicked.addListener((tab) => {
+    chrome.tabs.executeScript(
+      tab.id,
+      { code: copyToClipboardAsString }
+    )
+  })
 }
 
 function copyToClipboard() {
