@@ -11,11 +11,23 @@ function mainV3() {
 function main() {
   const copyToClipboardAsString = `(${copyToClipboard.toString()})();`;
 
-  chrome.browserAction.onClicked.addListener((tab) => {
-    chrome.tabs.executeScript(
-      tab.id,
-      { code: copyToClipboardAsString }
-    )
+  // this doesn't work if "commands" in manifest.json is enabled
+  // chrome.browserAction.onClicked.addListener((tab) => {
+  //   chrome.tabs.executeScript(
+  //     tab.id,
+  //     { code: copyToClipboardAsString }
+  //   )
+  // })
+
+  chrome.commands.onCommand.addListener((command) => {
+    if (command === "general") {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tab = tabs[0];
+        chrome.tabs.executeScript(
+          { code: copyToClipboardAsString }
+        )
+      })
+    }
   })
 }
 
