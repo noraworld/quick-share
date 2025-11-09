@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quick Share Options</title>
+  <link rel="stylesheet" href="css/options.css">
+</head>
+<body>
+  <main>
+    <h1>Quick Share Options</h1>
+    <p>Customize how Quick Share formats titles for specific domains. Rules are processed top-to-bottom and only the first matching rule is applied.</p>
+    <form id="options-form">
+      <div id="rules-container"></div>
+      <p id="empty-message" class="empty-message" hidden>No custom rules yet. Use “Add rule” to create one.</p>
+      <div class="actions">
+        <button type="button" id="add-rule">Add rule</button>
+        <button type="submit">Save changes</button>
+      </div>
+      <p id="status" role="status" aria-live="polite"></p>
+    </form>
+    <template id="rule-template">
+      <div class="rule">
+        <label>
+          Domain
+          <input type="text" name="domain" placeholder="e.g. youtube.com">
+        </label>
+        <label>
+          Title regex
+          <input type="text" name="pattern" placeholder="e.g. (.*) - YouTube">
+        </label>
+        <label>
+          Replacement
+          <input type="text" name="replacement" placeholder="e.g. $1">
+        </label>
+        <label>
+          Notes
+          <input type="text" name="description" placeholder="Optional description">
+        </label>
+        <button type="button" class="remove">Remove</button>
+      </div>
+    </template>
+  </main>
+  <script src="js/options.js"></script>
+</body>
+</html>
