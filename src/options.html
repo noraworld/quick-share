@@ -11,6 +11,7 @@
     <p>Customize how Quick Share formats titles for specific domains. Rules are processed top-to-bottom and only the first matching rule is applied.</p>
     <form id="options-form">
       <div id="rules-container"></div>
+      <p id="empty-message" class="empty-message" hidden>No custom rules yet. Use “Add rule” to create one.</p>
       <div class="actions">
         <button type="button" id="add-rule">Add rule</button>
         <button type="submit">Save changes</button>
@@ -21,11 +22,11 @@
       <div class="rule">
         <label>
           Domain
-          <input type="text" name="domain" placeholder="e.g. youtube.com" required>
+          <input type="text" name="domain" placeholder="e.g. youtube.com">
         </label>
         <label>
           Title regex
-          <input type="text" name="pattern" placeholder="e.g. (.*) - YouTube" required>
+          <input type="text" name="pattern" placeholder="e.g. (.*) - YouTube">
         </label>
         <label>
           Replacement

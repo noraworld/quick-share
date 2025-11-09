@@ -24,6 +24,16 @@ form {
   gap: 16px;
 }
 
+.empty-message {
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed #c7c9d1;
+  border-radius: 8px;
+  font-style: italic;
+  color: #4b4d57;
+  background: #fdfdff;
+}
+
 .rule {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -47,6 +57,11 @@ form {
   border-radius: 6px;
   border: 1px solid #c7c9d1;
   font-size: 0.95rem;
+}
+
+.rule input[type="text"].input-error {
+  border-color: #b00020;
+  box-shadow: 0 0 0 1px rgba(176, 0, 32, 0.2);
 }
 
 .rule .remove {
