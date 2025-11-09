@@ -3,6 +3,10 @@ Quick Share allows you to copy the current tab's title and URL to the clipboard.
 
 ![clipboard copy](assets/screenshots/clipboard_copy.png)
 
+## Installation
+* [Chrome Web Store](https://chromewebstore.google.com/detail/kjhcidanhganlbknaalgaiahmjjialeb/preview)
+* [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/quick-share/)
+
 ## Usage
 - Trigger Quick Share with the default shortcut `Ctrl+Shift+A` (`MacCtrl+Ctrl+A` on macOS) or by clicking the toolbar icon.
 - The extension copies a Markdown link for the active tab in the format `[Page Title](https://example.com/path)` to your clipboard.
