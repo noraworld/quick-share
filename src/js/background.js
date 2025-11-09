@@ -1,66 +1,112 @@
-function mainV3() {
-  chrome.action.onClicked.addListener((tab) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      function: copyToClipboard
+const extensionApi = typeof browser !== 'undefined' ? browser : chrome;
+const tabsApi = extensionApi?.tabs;
+const actionApi = extensionApi?.action ?? extensionApi?.browserAction;
+const commandsApi = extensionApi?.commands;
+const scriptingApi = extensionApi?.scripting;
+const stylesUrl = extensionApi?.runtime?.getURL('css/styles.css') ?? '';
+
+function initQuickShare() {
+  if (actionApi?.onClicked) {
+    actionApi.onClicked.addListener((tab) => {
+      if (tab?.id != null) {
+        injectCopy(tab.id);
+      } else {
+        withActiveTab((activeTabId) => injectCopy(activeTabId));
+      }
     });
+  }
+
+  if (commandsApi?.onCommand) {
+    commandsApi.onCommand.addListener((command) => {
+      if (command === 'general') {
+        withActiveTab((activeTabId) => injectCopy(activeTabId));
+      }
+    });
+  }
+}
+
+function withActiveTab(callback) {
+  if (!tabsApi?.query) {
+    return;
+  }
+
+  tabsApi.query({ active: true, currentWindow: true }, (tabs) => {
+    const [activeTab] = tabs ?? [];
+    if (activeTab?.id != null) {
+      callback(activeTab.id);
+    }
   });
 }
 
-// For v2
-function main() {
-  const copyToClipboardAsString = `(${copyToClipboard.toString()})();`;
+function injectCopy(tabId) {
+  if (tabId == null) {
+    return;
+  }
 
-  // this doesn't work if "commands" in manifest.json is enabled
-  // chrome.browserAction.onClicked.addListener((tab) => {
-  //   chrome.tabs.executeScript(
-  //     tab.id,
-  //     { code: copyToClipboardAsString }
-  //   )
-  // })
+  if (scriptingApi?.executeScript) {
+    scriptingApi.executeScript({
+      target: { tabId },
+      func: copyToClipboard,
+      args: [stylesUrl]
+    });
+    return;
+  }
 
-  chrome.commands.onCommand.addListener((command) => {
-    if (command === "general") {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tab = tabs[0];
-        chrome.tabs.executeScript(
-          { code: copyToClipboardAsString }
-        )
-      })
-    }
-  })
+  if (tabsApi?.executeScript) {
+    tabsApi.executeScript(tabId, {
+      code: getLegacyInjectionSource(stylesUrl)
+    });
+    return;
+  }
+
+  console.error('Quick Share: no supported injection API available.');
 }
 
-function copyToClipboard() {
+function getLegacyInjectionSource(cssPath) {
+  return `(${copyToClipboard.toString()})(${JSON.stringify(cssPath)});`;
+}
+
+function copyToClipboard(cssPath) {
   const textToCopy = `[${document.title}](${window.location.href})`;
 
-  // copy to the clipboard
   navigator.clipboard.writeText(textToCopy).then(() => {
-    showCopiedText({ textToCopy: `Copy succeeded:\n\n${textToCopy}`, succeeded: true, interval: 1000 })
+    showCopiedText({
+      textToCopy: `Copy succeeded:\n\n${textToCopy}`,
+      succeeded: true,
+      interval: 1000,
+      cssPath
+    });
   }).catch((error) => {
-    showCopiedText({ textToCopy: `Copy failed:\n\n${error}\n\n${textToCopy}`, succeeded: false, interval: 5000 })
+    showCopiedText({
+      textToCopy: `Copy failed:\n\n${error}\n\n${textToCopy}`,
+      succeeded: false,
+      interval: 5000,
+      cssPath
+    });
   });
 
-  function showCopiedText({ textToCopy, succeeded, interval }) {
-    // load CSS
-    const linkElement = document.createElement('link');
-    linkElement.rel = 'stylesheet';
-    linkElement.type = 'text/css';
-    linkElement.href = chrome.runtime.getURL('css/styles.css');
-    document.head.appendChild(linkElement);
+  function showCopiedText({ textToCopy, succeeded, interval, cssPath }) {
+    let linkElement;
+    if (cssPath) {
+      linkElement = document.createElement('link');
+      linkElement.rel = 'stylesheet';
+      linkElement.type = 'text/css';
+      linkElement.href = cssPath;
+      document.head.appendChild(linkElement);
+    }
 
-    // display the text
     const textElement = document.createElement('div');
     textElement.id = succeeded ? 'copied-text' : 'copied-text-err';
     textElement.innerText = textToCopy;
-
     document.body.appendChild(textElement);
 
     setTimeout(() => {
       textElement.remove();
-      linkElement.remove();
+      if (linkElement) {
+        linkElement.remove();
+      }
     }, interval);
   }
 }
 
-main();
+initQuickShare();
