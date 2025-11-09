@@ -23,3 +23,11 @@ Open the extension options page to add domain-specific rules that rewrite page t
 Rules are evaluated from top to bottom, and the first match wins.
 
 ![options page](assets/screenshots/options_page.png)
+
+#### Examples
+| Domain             | Title regex                                 | Replacement | Notes                                       |
+| ------------------ | ------------------------------------------- | ----------- | ------------------------------------------- |
+| `github.com`       | `(.*) · Issue #\d+ · .*/.*`                 | `$1`        | Keep only the issue title on issue pages.   |
+| `*.youtube.com`    | `(.*) - YouTube`                            | `$1`        | Drop the "- YouTube" suffix from videos.    |
+| `dev.to`           | `(.*) - DEV Community`                      | `$1`        | Use article titles without the site name.   |
+| `jira.example.com` | `(\w+-\d+) · (.*)`                          | `$2 [$1]`   | Move Jira issue key to the end in brackets. |
