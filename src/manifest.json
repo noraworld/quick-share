@@ -3,11 +3,15 @@
   "name": "Quick Share",
   "version": "0.1.0",
   "description": "Copy the current tab's title and URL to the clipboard",
-  "permissions": ["activeTab", "scripting", "clipboardWrite"],
+  "permissions": ["activeTab", "scripting", "clipboardWrite", "storage"],
   "background": {
     "service_worker": "js/background.js",
     "scripts": ["js/background.js"],
     "persistent": false
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   },
   "action": {
     "default_icon": {
