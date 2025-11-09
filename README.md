@@ -31,3 +31,6 @@ Rules are evaluated from top to bottom, and the first match wins.
 | `*.youtube.com`    | `(.*) - YouTube`                            | `$1`        | Drop the "- YouTube" suffix from videos.    |
 | `dev.to`           | `(.*) - DEV Community`                      | `$1`        | Use article titles without the site name.   |
 | `jira.example.com` | `(\w+-\d+) · (.*)`                          | `$2 [$1]`   | Move Jira issue key to the end in brackets. |
+
+## Privacy
+Quick Share never phones home: all logic runs locally and the only data we touch is the current tab's title/URL (and any optional rewrite rules you configure). If you still want the legal fine print, the full policy is a short read: [Privacy Policy for Quick Share](https://www.freeprivacypolicy.com/live/6531850d-0d0b-4fdc-b8b0-59f77de5b894).
