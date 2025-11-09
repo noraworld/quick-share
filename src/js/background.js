@@ -85,7 +85,7 @@ function copyToClipboard(cssPath, overrides = []) {
     showCopiedText({
       textToCopy: `Copy failed:\n\n${error}\n\n${textToCopy}`,
       succeeded: false,
-      interval: 5000,
+      interval: 1000,
       cssPath
     });
   });
