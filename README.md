@@ -4,7 +4,7 @@ Quick Share allows you to copy the current tab's title and URL to the clipboard.
 ![clipboard copy](assets/screenshots/clipboard_copy.png)
 
 ## Installation
-* [Chrome Web Store](https://chromewebstore.google.com/detail/kjhcidanhganlbknaalgaiahmjjialeb/preview)
+* [Chrome Web Store](https://chromewebstore.google.com/detail/quick-share/kjhcidanhganlbknaalgaiahmjjialeb)
 * [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/quick-share/)
 
 ## Usage
